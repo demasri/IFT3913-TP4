@@ -1,0 +1,9 @@
+chemin ,class ,classe_LOC ,classe_CLOC ,classe_DC ,WMC ,classe_BC 
+/home/daniel/Desktop/University/AUT20/IFT3913/IFT3913-TP1/IFT3913__El-Masri_Daniel__Bach_William__TP1/../files_to_analyze/personne.java,personne,19,0,0.0,0,0.0
+/home/daniel/Desktop/University/AUT20/IFT3913/IFT3913-TP1/IFT3913__El-Masri_Daniel__Bach_William__TP1/../files_to_analyze/Tests.java,Tests,90,29,0.32222223,12,0.026851853
+/home/daniel/Desktop/University/AUT20/IFT3913/IFT3913-TP1/IFT3913__El-Masri_Daniel__Bach_William__TP1/../files_to_analyze/test1/DataBase.java,DataBase,117,48,0.41025642,12,0.034188036
+/home/daniel/Desktop/University/AUT20/IFT3913/IFT3913-TP1/IFT3913__El-Masri_Daniel__Bach_William__TP1/../files_to_analyze/test1/Interface.java,Interface,202,18,0.089108914,0,0.0
+/home/daniel/Desktop/University/AUT20/IFT3913/IFT3913-TP1/IFT3913__El-Masri_Daniel__Bach_William__TP1/../files_to_analyze/test1/tst2/Membre.java,Membre,25,1,0.04,0,0.0
+/home/daniel/Desktop/University/AUT20/IFT3913/IFT3913-TP1/IFT3913__El-Masri_Daniel__Bach_William__TP1/../files_to_analyze/Rapport.java,Rapport,20,5,0.25,0,0.0
+/home/daniel/Desktop/University/AUT20/IFT3913/IFT3913-TP1/IFT3913__El-Masri_Daniel__Bach_William__TP1/../files_to_analyze/Service.java,Service,121,6,0.049586777,12,0.004132231
+/home/daniel/Desktop/University/AUT20/IFT3913/IFT3913-TP1/IFT3913__El-Masri_Daniel__Bach_William__TP1/../files_to_analyze/Vues.java,Vues,119,22,0.18487395,32,0.005777311
