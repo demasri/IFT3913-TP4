@@ -182,7 +182,7 @@ def check_for_correlation(repo_name):
 # Main method
 def main():
 	# beautify the console
-	# os.system('cls')
+	os.system('cls')
 	os.system('echo ====================================================')
 	os.system('echo 	              	   PROTO		      			')
 	os.system('echo ====================================================')
@@ -198,29 +198,23 @@ def main():
 
 	start = timeit.default_timer()
 
-	# clone_git_repository(url, repository)
-
-	# path = sp.getoutput('cd')
-
-	# hashes = get_hashes_list()
-
-	# compile_CodeAnalyzer(path)
-
-	# data = go_through_master_history(hashes, path, maximum)
-
-	# write_output_csv_file(data, repository)
-
-	# check_for_normality(repository)
-
-	# check_for_correlation(repository)
-
-	stop = timeit.default_timer()
-
-	os.chdir('./test')
+	clone_git_repository(url, repository)
 
 	path = sp.getoutput('cd')
 
-	print(count_java_files(path))
+	hashes = get_hashes_list()
+
+	compile_CodeAnalyzer(path)
+
+	data = go_through_master_history(hashes, path, maximum)
+
+	write_output_csv_file(data, repository)
+
+	check_for_normality(repository)
+
+	check_for_correlation(repository)
+
+	stop = timeit.default_timer()
 
 	print('Total execution time is ' + str(stop - start) + 's')
 

@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\graphicspath{ {./Images/} }
+
+\title{IFT3913 - Travail Pratique 4}
+\author{Daniel El-Masri (20096261) et Rym Bach (20078272)}
+\date{18 Decembre 2020}
+
+\begin{document}
+	
+\maketitle
+
+\textbf{Introduction :}\\
+
+Ce programme est fait pour prendre l'url d'un repositoire git et de calculer pour chaque version de \textit{commit} le degr\'ee de code comment\'e. 
+
+Pour executer le programme, il faut executer le script python "proto.py" dans la console. 
+
+Le script peut prendre 2 valeurs comme param\`etre:
+
+\begin{enumerate}
+	\item -url OU --repository : qui est l'url du repositoire git.
+	\item -max OU --maximum : un param\`etre optionel pour indiquer un nombre maximal de commit voulu (pour les repositoires de grandes tailles, on peut indiquer une limite). Si aucun maximum est entr\'e le programme calculera le degr\'ee pour tout les commits dans l'historique.
+\end{enumerate}
+
+Il est important de savoir que le plus le nombre de commit est grand, plus les donn\'ees sont pr\'ecises. Puisque on utilise des librairies externes, il serait bien de tester avec un minimum de 30 commit dans la branche \textit{master} du repositoire.
+
+
+\textbf{Note Importante : } Ce travail pratique \`a permis de r\'e\'eler un probl\`eme dans notre solution du Travail Pratique 1 qui fais que lorsque le fichier a plus que 1000 fichiers, le CodeAnalyzer plante... Cela n'est cependant pas un probl\`eme dans le code de la solution du Travail Pratique 4 car c'est une erreur \textit{Java.Lang.ArrayOutOfBoundsException}. \\
+
+\begin{center}
+	\color{red}
+	Le code plantera si toute la colonne n\_classe contient la meme valeur (ex: [2,2,2,2,...,2]) MAIS cela est causer par la librairie utiliser et arrive rarement (cela arrive pour jfreechart en bas de 100 commits)
+\end{center}
+
+\begin{center}
+	\color{red}
+	Le code plantera si le lien de l'url ne contient pas l'extension .git \`a la fin
+\end{center}
+
+
+un exemple d'execution est :\\
+\textit{python.py proto.py -url https://github.com/jfree/jfreechart.git -max 100}
+\textit{python.py proto.py -url https://github.com/demasri/IFT3913-TP1.git}
+ 
+\textbf{Description du Code: }\\
+
+Le code est bien s\'epar\'e pour chaque \'etape a suivre, nous allons d\'ecrire le fonctionnement de chaque \'etape une par une:
+
+\begin{enumerate}
+	\item \underline{Cloner le repositoire git :} la m\'ethode \textit{clone\_git\_repository} prend deux valeurs en param\`etres. Le premier est l’URL du repositoire et le deuxi\`eme est le nom du repositoire. Le code commence par chercher si le repositoire existe déjà, si celui-ci existe d\'ej\`a alors le code va simplement aller chercher les plus r\'ecentes modifications. Si le repositoire n’existe pas, le code va aller cloner le repositoire gr\^ace au lien qui lui est pass\'e en param\`etres. Une fois le repositoire cloner, le code va aller chercher la version la plus r\'ecente.
+	\item \underline{Obtenir la liste des hashes de commits :} La m\'ethode \textit{get\_hashes\_list} ne prend aucun paramètres. Cette m\'ethode ex\'ecute la commande \textit{git rev-list master} pour aller chercher la liste des hashes de versions puis elle retourne un tableau contenant cette liste.
+	\item \underline{Calculer les donn\'ees :} La m\'ethode \textit{go\_through\_master\_history} contient la majorit\'e de la logique du programme pour la partie I. Tout d’abord elle regarde si un maximum \`a \'et\'e entr\'e en param\`etres. Si oui, il y aura une boucle qui s’assurera que le code s’ex\'ecute seulement autant de fois que le maximum le demande. Ensuite elle passe \`a travers la liste des hashes, et pour chacun, elle met à jour le repositoire avec la version du hash et créer un tuple le contenant le hash de la version, le nombre de fichiers .java et la médiane de la métrique classe\_BC. Finalement, elle retourne un tableau contenant ces tuples.
+	\item \underline{Compter le nombre de fichier JAVA :} La m\'ethode \textit{count\_java\_files} fait partie de la logique du programme. Elle permet de passer \`a travers un repositoire dont le path lui est pass\'e en param\`etres puis elle parcourt tous les fichiers et sous-répertoire pour aller compter le nombre de fichiers aillant une extension .java.
+	\item \underline{Compiler l'analysateur de code :} La m\'ethode \textit{compile\_CodeAnalyzer} prend en parametre le path du repositoire et compile l'analysateur de code (le \textit{CodeAnalyzer} cr\'ee dans le TP1). 
+	\item \underline{Executer l'analysateur de code :} La m\'ethode \textit{execute\_CodeAnalyzer} prend en parametre le path du repositoire et ex\'ecute' l'analysateur de code (le \textit{CodeAnalyzer} cr\'ee dans le TP1) sur le path du repositoire qui lui ai pass]'e en param\`etre. 
+	\item \underline{Calculer la mediane de classe\_BC :} La m\'ethode \textit{calculate\_median\_BC} permet de prendre un fichier CSV et de calculer la médiane de m\'etrique classe\_BC. Pour faire cela, elle va simplement aller chercher la colonne contenant la m\'etrique classe\_BC puis elle calcule la m\'ediane.
+	\item \underline{Cr\'eer le fichier CSV r\'esultant :} La m\'ethode \textit{write\_output\_csv\_file} prends en param\`etre le tableau de tuple \textit{data} et le nom du repositoire \textit{repo\_name} puis elle \'ecris un fichier CSV avec un nom de fichier contenant le nom du repositoire. Cela est pour permettre d'executer le code sur plusieurs repositoire sans perdre les donn\'es cr\'ee anciennement.
+	\item \underline{Faire le test de normalit\'e :} La m\'ethode \textit{check\_for\_normality} prends en param\`etre le nom du repositoire \`a tester puis commence par aller chercher les donn\'ee n\'ec\'essaire pour faire les tests statistiques. Ensuite, en utilisant la librairie \textit{scipy}, calcule la p-value. Une fois le r\'esultat obtenue, la fonction retourne la valeur obtenue et la conclusion associ\'e \`a cette valeur.
+	\item \underline{Faire le test de corr\'elation :} La m\'ethode \textit{check\_for\_correlation} prends en param\`etre le nom du repositoire \`a tester puis commence par aller chercher les donn\'ee n\'ec\'essaire pour faire les tests statistiques. Ensuite, en utilisant la librairie \textit{scipy}, calcule le co\'efficient de corr\'elation de Pearson. Une fois le r\'esultat obtenue, la fonction retourne la valeur obtenue et la conclusion associ\'e \`a cette valeur.
+	\item \underline{Fonction aidante : } Cette méthode \textit{get\_specific\_data\_from\_column} est une méthode aidantes privé qui prends en paran\`etre le nom du fichier et l'index de la colonne pour que celle-ci permet simplement de aller chercher les donn\'ees une colonne spécifique dans un fichier CSV. Puisque cette logique fut utilisé à plusieurs reprises il était plus logique de séparer cela dans une fonction à part qui est appelé plusieurs fois.
+\end{enumerate}
+
+\textbf{Conclusion :}  je tiens \`a vous remercier pour l'extension du d\'elai pour la remise du devoir! Ce f\^ut un vrai plaisir apprendre avec vous et Mr. Famelis. J'ai \'enorm\'ement appr\'eci\'e et appris au courant de l'ann\'ee!
+
+\end{document}
